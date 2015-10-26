@@ -61,7 +61,7 @@
                 android:layout_toRightOf="@+id/imgNext"
                 android:contentDescription="@null"
                 android:padding="5dp"
-                android:src="@drawable/ic_play" />
+                android:src="@drawable/ic_none_repeat" />
 
             <TextView
                 android:id="@+id/tvSongTitle"

@@ -55,6 +55,8 @@ public class MainActivity extends Activity implements OnItemListener {
     LinearLayout mController;
     @ViewById(R.id.tvSongTitle)
     TextView mTvSongTitle;
+    @ViewById(R.id.imgRepeat)
+    ImageView mImgRepeat;
     private ArrayList<Song> mListSong;
     private boolean mBound;
     private MusicService mMusicService;
@@ -131,8 +133,8 @@ public class MainActivity extends Activity implements OnItemListener {
                             showController();
                             break;
                         case "close":
+                            mMusicService = null;
                             finish();
-                            break;
                     }
                 }
             }
@@ -163,8 +165,11 @@ public class MainActivity extends Activity implements OnItemListener {
         Log.d("TAG ACTIVITY", "getListSong");
         ContentResolver musicResolver = getContentResolver();
         Uri musicUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor musicCursor = musicResolver.query(musicUri, null, null, null, null);
+
+        Cursor musicCursor = musicResolver.query(musicUri, null, MediaStore.Audio.Media.IS_MUSIC +
+                " !=0", null, null);
         if (musicCursor != null && musicCursor.moveToFirst()) {
+
             int titleColumn = musicCursor.getColumnIndex
                     (MediaStore.Audio.Media.DISPLAY_NAME);
             int idColumn = musicCursor.getColumnIndex
@@ -208,12 +213,28 @@ public class MainActivity extends Activity implements OnItemListener {
         mMusicService.playPrev();
     }
 
+    @Click(R.id.imgRepeat)
+    void onClickRepeat() {
+        Log.d("TAG ACTIVITY", "onClickRepeat");
+        mMusicService.setRepeat(!isRepeat());
+        updateRepeat();
+    }
+
     private void updatePlayPause() {
         Log.d("TAG ACTIVITY", "updatePlayPause");
         if (isPlaying()) {
             mImgPlay.setImageResource(R.drawable.ic_pause);
         } else {
             mImgPlay.setImageResource(R.drawable.ic_play);
+        }
+    }
+
+    private void updateRepeat() {
+        Log.d("TAG ACTIVITY", "updateRepeat");
+        if (isRepeat()) {
+            mImgRepeat.setImageResource(R.drawable.ic_repeat);
+        } else {
+            mImgRepeat.setImageResource(R.drawable.ic_none_repeat);
         }
     }
 
@@ -269,6 +290,11 @@ public class MainActivity extends Activity implements OnItemListener {
 
     private boolean isPlaying() {
         return mMusicService != null && mBound && mMusicService.isPlaying();
+
+    }
+
+    private boolean isRepeat() {
+        return mMusicService != null && mBound && mMusicService.isRepeat();
 
     }
 
@@ -366,6 +392,7 @@ public class MainActivity extends Activity implements OnItemListener {
         setSongTime();
         mTvSongTitle.setText(getSongTitle());
         updatePlayPause();
+        updateRepeat();
         updateProgress();
     }
 }

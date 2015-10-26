@@ -35,7 +35,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private String mMessage = "";
     private RemoteViews mRemoteViews;
     private Notification mNotification;
-    private boolean mPause = false;
+    private boolean mPause;
+    private boolean mRepeat;
 
     public MusicService() {
     }
@@ -96,7 +97,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     @Override
     public void onCompletion(MediaPlayer mp) {
         Log.d("TAG SERVICE", "onCompletion");
-        playNext();
+        if (isRepeat()) {
+            playSong();
+        } else {
+            playNext();
+        }
+
     }
 
     @Override
@@ -224,6 +230,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return mListSong.get(mSongPosition).getTitle();
     }
 
+    public void setRepeat(boolean repeat) {
+        this.mRepeat = repeat;
+    }
+
     public int getCurPos() {
         return mMediaPlayer.getCurrentPosition();
     }
@@ -248,6 +258,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     public boolean isPlayMusic() {
         return isPlaying() || mPause;
+    }
+
+    public boolean isRepeat() {
+        return mRepeat;
     }
 
     private void sendBroadcast() {

@@ -57,6 +57,8 @@ public class MainActivity extends Activity implements OnItemListener {
     TextView mTvSongTitle;
     @ViewById(R.id.imgRepeat)
     ImageView mImgRepeat;
+    @ViewById(R.id.imgShuffle)
+    ImageView mImgShuffle;
     private ArrayList<Song> mListSong;
     private boolean mBound;
     private MusicService mMusicService;
@@ -65,6 +67,7 @@ public class MainActivity extends Activity implements OnItemListener {
     private Formatter mFormatter;
     private Handler mHandler = new Handler();
     public static final String ACTION_STRING_ACTIVITY = "ToActivity";
+    SongAdapter mAdapter;
 
     @AfterViews
     void afterView() {
@@ -76,9 +79,9 @@ public class MainActivity extends Activity implements OnItemListener {
                 return a.getTitle().compareTo(b.getTitle());
             }
         });
-        SongAdapter adapter = new SongAdapter(this, mListSong, this);
+        mAdapter = new SongAdapter(this, mListSong, this);
         mRecycleListSong.setLayoutManager(new LinearLayoutManager(this));
-        mRecycleListSong.setAdapter(adapter);
+        mRecycleListSong.setAdapter(mAdapter);
         mController.setVisibility(View.GONE);
         mTvSongTitle.setSelected(true);
         mFormatBuilder = new StringBuilder();
@@ -125,12 +128,14 @@ public class MainActivity extends Activity implements OnItemListener {
                     switch (message) {
                         case "play":
                             showController();
+                            updateSongPlay();
                             break;
                         case "pause":
                             updatePlayPause();
                             break;
                         case "onRebind":
                             showController();
+                            updateSongPlay();
                             break;
                         case "close":
                             mMusicService = null;
@@ -140,6 +145,15 @@ public class MainActivity extends Activity implements OnItemListener {
             }
         }
     };
+
+    private void updateSongPlay() {
+        Log.d("TAG ACTIVITY", "updateSongPlay");
+        for (int i = 0; i < mListSong.size(); i++) {
+            mListSong.get(i).setPlaying(false);
+        }
+        mListSong.get(mMusicService.getSongPosition()).setPlaying(true);
+        mAdapter.notifyDataSetChanged();
+    }
 
     private SeekBar.OnSeekBarChangeListener mListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
@@ -180,7 +194,7 @@ public class MainActivity extends Activity implements OnItemListener {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
                 String thisArtist = musicCursor.getString(artistColumn);
-                mListSong.add(new Song(thisId, thisTitle, thisArtist));
+                mListSong.add(new Song(thisId, thisTitle, thisArtist, false));
             }
             while (musicCursor.moveToNext());
         }
@@ -204,12 +218,14 @@ public class MainActivity extends Activity implements OnItemListener {
     @Click(R.id.imgNext)
     void onClickNext() {
         Log.d("TAG ACTIVITY", "onClickNext");
+        resetController();
         mMusicService.playNext();
     }
 
     @Click(R.id.imgBack)
     void onClickPrev() {
         Log.d("TAG ACTIVITY", "onClickPrev");
+        resetController();
         mMusicService.playPrev();
     }
 
@@ -218,6 +234,13 @@ public class MainActivity extends Activity implements OnItemListener {
         Log.d("TAG ACTIVITY", "onClickRepeat");
         mMusicService.setRepeat(!isRepeat());
         updateRepeat();
+    }
+
+    @Click(R.id.imgShuffle)
+    void onClickShuffle() {
+        Log.d("TAG ACTIVITY", "onClickShuffle");
+        mMusicService.setShuffle(!isShuffle());
+        updateShuffle();
     }
 
     private void updatePlayPause() {
@@ -235,6 +258,15 @@ public class MainActivity extends Activity implements OnItemListener {
             mImgRepeat.setImageResource(R.drawable.ic_repeat);
         } else {
             mImgRepeat.setImageResource(R.drawable.ic_none_repeat);
+        }
+    }
+
+    private void updateShuffle() {
+        Log.d("TAG ACTIVITY", "updateShuffle");
+        if (isShuffle()) {
+            mImgShuffle.setImageResource(R.drawable.ic_shuffle);
+        } else {
+            mImgShuffle.setImageResource(R.drawable.ic_none_shuffle);
         }
     }
 
@@ -296,6 +328,10 @@ public class MainActivity extends Activity implements OnItemListener {
     private boolean isRepeat() {
         return mMusicService != null && mBound && mMusicService.isRepeat();
 
+    }
+
+    private boolean isShuffle() {
+        return mMusicService != null && mBound && mMusicService.isShuffle();
     }
 
     @Override
@@ -383,16 +419,25 @@ public class MainActivity extends Activity implements OnItemListener {
     @Override
     public void onItemClick(int position) {
         Log.d("TAG ACTIVITY", "onItemClick");
+        resetController();
         mMusicService.setSong(position);
         mMusicService.playSong();
     }
 
     private void showController() {
         mController.setVisibility(View.VISIBLE);
-        setSongTime();
         mTvSongTitle.setText(getSongTitle());
         updatePlayPause();
         updateRepeat();
+        updateShuffle();
         updateProgress();
+        setSongTime();
+    }
+
+    private void resetController() {
+        Log.d("TAG ACTIVITY", "resetController");
+        if (mHandler != null && mRunnable != null) {
+            mHandler.removeCallbacks(mRunnable);
+        }
     }
 }

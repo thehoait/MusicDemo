@@ -1,6 +1,7 @@
 package com.example.asiantech.musicdemo.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +14,7 @@ import com.example.asiantech.musicdemo.model.Song;
 
 import java.util.ArrayList;
 
-public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder>{
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
     private Context mContext;
     private ArrayList<Song> mListSong;
     private OnItemListener mListener;
@@ -35,6 +36,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         Song song = mListSong.get(position);
         holder.mTvTitle.setText(song.getTitle());
         holder.mTvArtist.setText(song.getArtist());
+        if (song.isPlaying()) {
+            holder.mTvTitle.setTextColor(Color.parseColor("#FF4081"));
+        } else {
+            holder.mTvTitle.setTextColor(Color.parseColor("#80000000"));
+        }
     }
 
     @Override

@@ -63,6 +63,16 @@
                 android:padding="5dp"
                 android:src="@drawable/ic_none_repeat" />
 
+            <ImageView
+                android:id="@+id/imgShuffle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/imgRepeat"
+                android:layout_toRightOf="@+id/imgRepeat"
+                android:contentDescription="@null"
+                android:padding="5dp"
+                android:src="@drawable/ic_none_shuffle" />
+
             <TextView
                 android:id="@+id/tvSongTitle"
                 android:layout_width="wrap_content"
@@ -70,8 +80,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/imgRepeat"
-                android:layout_toRightOf="@+id/imgRepeat"
+                android:layout_toEndOf="@+id/imgShuffle"
+                android:layout_toRightOf="@+id/imgShuffle"
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"

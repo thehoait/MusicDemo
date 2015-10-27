@@ -24,6 +24,7 @@ import com.example.asiantech.musicdemo.model.Song;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
@@ -37,6 +38,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private Notification mNotification;
     private boolean mPause;
     private boolean mRepeat;
+    private boolean mShuffle;
 
     public MusicService() {
     }
@@ -99,6 +101,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         Log.d("TAG SERVICE", "onCompletion");
         if (isRepeat()) {
             playSong();
+        } else if (isShuffle()) {
+            playShuffle();
         } else {
             playNext();
         }
@@ -141,6 +145,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void setSong(int position) {
         Log.d("TAG SERVICE", "setSong");
         this.mSongPosition = position;
+    }
+
+    public int getSongPosition() {
+        return mSongPosition;
     }
 
     private void createNotification() {
@@ -226,12 +234,23 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         playSong();
     }
 
+    public void playShuffle() {
+        Log.d("TAG SERVICE", "playShuffle");
+        Random random = new Random();
+        mSongPosition = random.nextInt(mListSong.size()-1);
+        playSong();
+    }
+
     public String getSongTitle() {
         return mListSong.get(mSongPosition).getTitle();
     }
 
     public void setRepeat(boolean repeat) {
         this.mRepeat = repeat;
+    }
+
+    public void setShuffle(boolean shuffle) {
+        this.mShuffle = shuffle;
     }
 
     public int getCurPos() {
@@ -262,6 +281,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     public boolean isRepeat() {
         return mRepeat;
+    }
+
+    public boolean isShuffle() {
+        return mShuffle;
     }
 
     private void sendBroadcast() {

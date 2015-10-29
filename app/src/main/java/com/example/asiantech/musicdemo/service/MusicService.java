@@ -140,6 +140,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void setList(ArrayList<Song> listSong) {
         Log.d("TAG SERVICE", "setList");
         mListSong = listSong;
+        Log.d("tantv","Service: "+mListSong.hashCode());
     }
 
     public void setSong(int position) {

@@ -49,4 +49,5 @@ dependencies {
     compile 'org.androidannotations:androidannotations-api:3.3.2'
     compile 'com.android.support:recyclerview-v7:23.1.0'
     compile 'org.projectlombok:lombok:1.16.6'
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
 }

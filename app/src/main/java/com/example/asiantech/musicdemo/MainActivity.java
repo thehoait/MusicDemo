@@ -1,6 +1,5 @@
 package com.example.asiantech.musicdemo;
 
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -14,8 +13,9 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,7 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.asiantech.musicdemo.adapter.SongAdapter;
+import com.astuetz.PagerSlidingTabStrip;
+import com.example.asiantech.musicdemo.adapter.PagerAdapter;
+import com.example.asiantech.musicdemo.fragment.SongListFragment_;
 import com.example.asiantech.musicdemo.model.Song;
 import com.example.asiantech.musicdemo.service.MusicService;
 
@@ -38,11 +40,15 @@ import java.util.Comparator;
 import java.util.Formatter;
 import java.util.Locale;
 
-@EActivity(R.layout.activity_main)
-public class MainActivity extends Activity implements OnItemListener {
+import lombok.Getter;
 
-    @ViewById(R.id.recycleViewListSong)
-    RecyclerView mRecycleListSong;
+@EActivity(R.layout.activity_main)
+public class MainActivity extends FragmentActivity implements OnItemListener {
+
+    @ViewById(R.id.tabStrip)
+    PagerSlidingTabStrip mTabStrip;
+    @ViewById(R.id.viewPager)
+    ViewPager mViewPager;
     @ViewById(R.id.imgPlay)
     ImageView mImgPlay;
     @ViewById(R.id.seekBar)
@@ -59,6 +65,9 @@ public class MainActivity extends Activity implements OnItemListener {
     ImageView mImgRepeat;
     @ViewById(R.id.imgShuffle)
     ImageView mImgShuffle;
+    @Getter
+    private OnItemListener mOnItemListener;
+    @Getter
     private ArrayList<Song> mListSong;
     private boolean mBound;
     private MusicService mMusicService;
@@ -67,7 +76,7 @@ public class MainActivity extends Activity implements OnItemListener {
     private Formatter mFormatter;
     private Handler mHandler = new Handler();
     public static final String ACTION_STRING_ACTIVITY = "ToActivity";
-    SongAdapter mAdapter;
+    private PagerAdapter mPagerAdapter;
 
     @AfterViews
     void afterView() {
@@ -79,9 +88,10 @@ public class MainActivity extends Activity implements OnItemListener {
                 return a.getTitle().compareTo(b.getTitle());
             }
         });
-        mAdapter = new SongAdapter(this, mListSong, this);
-        mRecycleListSong.setLayoutManager(new LinearLayoutManager(this));
-        mRecycleListSong.setAdapter(mAdapter);
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mPagerAdapter);
+        mOnItemListener = this;
+        mTabStrip.setViewPager(mViewPager);
         mController.setVisibility(View.GONE);
         mTvSongTitle.setSelected(true);
         mFormatBuilder = new StringBuilder();
@@ -147,12 +157,16 @@ public class MainActivity extends Activity implements OnItemListener {
     };
 
     private void updateSongPlay() {
+
         Log.d("TAG ACTIVITY", "updateSongPlay");
         for (int i = 0; i < mListSong.size(); i++) {
             mListSong.get(i).setPlaying(false);
         }
         mListSong.get(mMusicService.getSongPosition()).setPlaying(true);
-        mAdapter.notifyDataSetChanged();
+        Fragment fragment = mPagerAdapter.getItem(0);
+        if (fragment instanceof SongListFragment_) {
+            ((SongListFragment_) fragment).notifySongListAdapter();
+        }
     }
 
     private SeekBar.OnSeekBarChangeListener mListener = new SeekBar.OnSeekBarChangeListener() {

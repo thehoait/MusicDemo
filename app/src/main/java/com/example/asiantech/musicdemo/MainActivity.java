@@ -147,6 +147,9 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
                             showController();
                             updateSongPlay();
                             break;
+                        case "completion":
+                            resetController();
+                            break;
                         case "close":
                             mMusicService = null;
                             finish();
@@ -198,17 +201,21 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
                 " !=0", null, null);
         if (musicCursor != null && musicCursor.moveToFirst()) {
 
-            int titleColumn = musicCursor.getColumnIndex
-                    (MediaStore.Audio.Media.DISPLAY_NAME);
-            int idColumn = musicCursor.getColumnIndex
-                    (MediaStore.Audio.Media._ID);
-            int artistColumn = musicCursor.getColumnIndex
-                    (MediaStore.Audio.Media.ARTIST);
+            int titleColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
+            int idColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID);
+            int artistId = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID);
+            int artistColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
+            int albumIdColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID);
+            int albumColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
+                long thisArtistId = musicCursor.getLong(artistId);
                 String thisArtist = musicCursor.getString(artistColumn);
-                mListSong.add(new Song(thisId, thisTitle, thisArtist, false));
+                long thisAlbumId = musicCursor.getLong(albumIdColumn);
+                String thisAlbum = musicCursor.getString(albumColumn);
+                mListSong.add(new Song(thisId, thisTitle, thisArtistId, thisArtist, thisAlbumId,
+                        thisAlbum, false));
             }
             while (musicCursor.moveToNext());
         }

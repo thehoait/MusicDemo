@@ -201,7 +201,7 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
                 " !=0", null, null);
         if (musicCursor != null && musicCursor.moveToFirst()) {
 
-            int titleColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
+            int titleColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             int idColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media._ID);
             int artistId = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID);
             int artistColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);

@@ -18,32 +18,31 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 
 @EFragment(R.layout.song_list_fragment)
-public class SongListFragment extends Fragment {
+public class AlbumDetailFragment extends Fragment {
     @ViewById(R.id.recycleViewListSong)
     RecyclerView mRecycleListSong;
-    private SongAdapter mAdapter;
-    private ArrayList<Song> mListSong;
     private OnItemListener mOnItemListener;
+    private long mAlbumId;
 
     @AfterViews
     void afterView() {
-        Log.d("TAG SONG LIST FRAGMENT","afterView");
-        mListSong = new ArrayList<>();
+        Log.d("TAG DETAIL FRAGMENT", "afterView");
+        ArrayList<Song> listSong = new ArrayList<>();
+        if (getArguments() != null) {
+            mAlbumId = getArguments().getLong("albumId");
+        }
         if (getActivity() instanceof MainActivity_) {
-            mListSong = ((MainActivity_) getActivity()).getMListSong();
+            listSong = ((MainActivity_) getActivity()).getMListSong();
             mOnItemListener = ((MainActivity_) getActivity()).getMOnItemListener();
         }
-        mAdapter = new SongAdapter(getContext(), mListSong, mOnItemListener);
-        mRecycleListSong.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecycleListSong.setAdapter(mAdapter);
-    }
-
-    public void notifySongListAdapter() {
-        if (mAdapter != null) {
-            mAdapter.notifyDataSetChanged();
-        } else {
-            Log.d("sss", "adapter is null");
+        ArrayList<Song> listSongAlbum = new ArrayList<>();
+        for (int i = listSong.size() - 1; i >= 0; i--) {
+            if (listSong.get(i).getAlbumId() == mAlbumId) {
+                listSongAlbum.add(listSong.get(i));
+            }
         }
-
+        SongAdapter adapter = new SongAdapter(getContext(), listSongAlbum, mOnItemListener);
+        mRecycleListSong.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecycleListSong.setAdapter(adapter);
     }
 }

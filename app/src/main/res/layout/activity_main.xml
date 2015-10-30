@@ -6,18 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.astuetz.PagerSlidingTabStrip
-        android:id="@+id/tabStrip"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        app:pstsShouldExpand="true" />
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewPager"
+    <RelativeLayout
+        android:id="@+id/rlContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/llController"
-        android:layout_below="@+id/tabStrip" />
+        android:layout_above="@+id/llController">
+
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/tabStrip"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:pstsShouldExpand="true" />
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tabStrip" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/llController"

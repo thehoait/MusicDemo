@@ -10,6 +10,9 @@ import lombok.Data;
 public class Song implements Serializable{
     private long id;
     private String title;
+    private long artistId;
     private String artist;
+    private long albumId;
+    private String album;
     private boolean isPlaying;
 }

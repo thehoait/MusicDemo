@@ -99,6 +99,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     @Override
     public void onCompletion(MediaPlayer mp) {
         Log.d("TAG SERVICE", "onCompletion");
+        mMessage = "completion";
+        sendBroadcast();
         if (isRepeat()) {
             playSong();
         } else if (isShuffle()) {
@@ -140,7 +142,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void setList(ArrayList<Song> listSong) {
         Log.d("TAG SERVICE", "setList");
         mListSong = listSong;
-        Log.d("tantv","Service: "+mListSong.hashCode());
     }
 
     public void setSong(int position) {
@@ -220,7 +221,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void playNext() {
         Log.d("TAG SERVICE", "playNext");
         mSongPosition++;
-        if (mSongPosition >= mListSong.size() - 1) {
+        if (mSongPosition >= mListSong.size()) {
             mSongPosition = 0;
         }
         playSong();
@@ -238,7 +239,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void playShuffle() {
         Log.d("TAG SERVICE", "playShuffle");
         Random random = new Random();
-        mSongPosition = random.nextInt(mListSong.size()-1);
+        mSongPosition = random.nextInt(mListSong.size() - 1);
         playSong();
     }
 

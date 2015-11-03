@@ -102,6 +102,10 @@ public class PlaySongFragment extends Fragment {
                             updateProgress();
                             setSongTime();
                             setSongTitle();
+                            break;
+                        case "pause":
+                            updatePlayPause();
+                            break;
                     }
                 }
             }

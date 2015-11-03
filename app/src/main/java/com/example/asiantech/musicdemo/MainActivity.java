@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.example.asiantech.musicdemo.adapter.PagerAdapter;
+import com.example.asiantech.musicdemo.fragment.PlaySongFragment_;
 import com.example.asiantech.musicdemo.fragment.SongListFragment_;
 import com.example.asiantech.musicdemo.model.Song;
 import com.example.asiantech.musicdemo.service.MusicService;
@@ -271,6 +273,17 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
         Log.d("TAG ACTIVITY", "onClickShuffle");
         mMusicService.setShuffle(!isShuffle());
         updateShuffle();
+    }
+
+    @Click(R.id.tvSongTitle)
+    void onClickTitle() {
+        Log.d("TAG ACTIVITY", "onClickTitle");
+        PlaySongFragment_ fragment = new PlaySongFragment_();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.rlMainContainer
+                , fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void updatePlayPause() {

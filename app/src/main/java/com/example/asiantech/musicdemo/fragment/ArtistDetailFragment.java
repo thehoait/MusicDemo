@@ -48,7 +48,8 @@ public class ArtistDetailFragment extends Fragment implements OnItemListener {
             if (listSong.get(i).getArtistId() == mArtistId) {
                 Song song = listSong.get(i);
                 mListSongArtist.add(new Song(song.getId(), song.getTitle(), song.getArtistId(),
-                        song.getArtist(), song.getAlbumId(), song.getAlbum(), false));
+                        song.getArtist(), song.getAlbumId(), song.getAlbum(), song.getDisplay(),
+                        false));
             }
         }
         if (mMusicService.getListType().equals(MainActivity.LIST_TYPE_ARTIST)) {

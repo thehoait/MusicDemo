@@ -14,5 +14,6 @@ public class Song implements Serializable{
     private String artist;
     private long albumId;
     private String album;
+    private String display;
     private boolean isPlaying;
 }

@@ -262,7 +262,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public String getSongTitle() {
-        return mPlayList.get(mSongPosition).getTitle();
+        return mPlayList.get(mSongPosition).getDisplay();
     }
 
     public void setRepeat(boolean repeat) {

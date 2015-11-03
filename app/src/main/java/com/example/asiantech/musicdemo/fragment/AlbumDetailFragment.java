@@ -24,7 +24,7 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 
 @EFragment(R.layout.song_list_fragment)
-public class AlbumDetailFragment extends Fragment implements OnItemListener{
+public class AlbumDetailFragment extends Fragment implements OnItemListener {
     @ViewById(R.id.recycleViewListSong)
     RecyclerView mRecycleListSong;
     private long mAlbumId;
@@ -48,7 +48,8 @@ public class AlbumDetailFragment extends Fragment implements OnItemListener{
             if (listSong.get(i).getAlbumId() == mAlbumId) {
                 Song song = listSong.get(i);
                 mListSongAlbum.add(new Song(song.getId(), song.getTitle(), song.getArtistId(),
-                        song.getArtist(), song.getAlbumId(), song.getAlbum(), false));
+                        song.getArtist(), song.getAlbumId(), song.getAlbum(), song.getDisplay(),
+                        false));
             }
         }
         if (mMusicService.getListType().equals(MainActivity.LIST_TYPE_ALBUM)) {

@@ -214,6 +214,7 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
             int artistColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST);
             int albumIdColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID);
             int albumColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+            int displayColumn = musicCursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME);
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
@@ -221,8 +222,9 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
                 String thisArtist = musicCursor.getString(artistColumn);
                 long thisAlbumId = musicCursor.getLong(albumIdColumn);
                 String thisAlbum = musicCursor.getString(albumColumn);
+                String thisDisplay = musicCursor.getString(displayColumn);
                 mListSong.add(new Song(thisId, thisTitle, thisArtistId, thisArtist, thisAlbumId,
-                        thisAlbum, false));
+                        thisAlbum, thisDisplay, false));
             }
             while (musicCursor.moveToNext());
         }

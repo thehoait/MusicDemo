@@ -35,6 +35,10 @@ public class PlaySongFragment extends Fragment {
     TextView mTvSongTime;
     @ViewById(R.id.imgPlay)
     ImageView mImgPlay;
+    @ViewById(R.id.imgShuffle)
+    ImageView mImgShuffle;
+    @ViewById(R.id.imgRepeat)
+    ImageView mImgRepeat;
     private MusicService mMusicService;
     private StringBuilder mFormatBuilder;
     private Formatter mFormatter;
@@ -126,6 +130,26 @@ public class PlaySongFragment extends Fragment {
         mMusicService.playPrev();
     }
 
+    @Click(R.id.imgShuffle)
+    void onClickShuffle() {
+        mMusicService.setShuffle(!mMusicService.isShuffle());
+        updateShuffle();
+    }
+
+    @Click(R.id.imgRepeat)
+    void onClickRepeat() {
+        mMusicService.setRepeat(!mMusicService.isRepeat());
+        updateRepeat();
+    }
+
+    private void updateRepeat() {
+        mImgRepeat.setSelected(mMusicService.isRepeat());
+    }
+
+    private void updateShuffle() {
+        mImgShuffle.setSelected(mMusicService.isShuffle());
+    }
+
     private void setSongTime() {
         Log.d("TAG ACTIVITY", "setSongTime");
         int duration = mMusicService.getDur();
@@ -166,9 +190,9 @@ public class PlaySongFragment extends Fragment {
     private void updatePlayPause() {
         Log.d("TAG ACTIVITY", "updatePlayPause");
         if (mMusicService.isPlaying()) {
-            mImgPlay.setImageResource(R.drawable.ic_pause);
+            mImgPlay.setImageResource(R.drawable.button_pause);
         } else {
-            mImgPlay.setImageResource(R.drawable.ic_play);
+            mImgPlay.setImageResource(R.drawable.button_play);
         }
     }
 

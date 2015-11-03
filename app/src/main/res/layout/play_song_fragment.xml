@@ -71,7 +71,7 @@
             android:layout_weight="1"
             android:contentDescription="@null"
             android:padding="5dp"
-            android:src="@drawable/ic_none_shuffle" />
+            android:src="@drawable/button_shuffle" />
 
         <ImageView
             android:id="@+id/imgBack"
@@ -80,7 +80,7 @@
             android:layout_weight="1"
             android:contentDescription="@null"
             android:padding="@dimen/controller_padding"
-            android:src="@drawable/ic_back" />
+            android:src="@drawable/button_back" />
 
         <ImageView
             android:id="@+id/imgPlay"
@@ -89,7 +89,7 @@
             android:layout_weight="1"
             android:contentDescription="@null"
             android:padding="@dimen/controller_padding"
-            android:src="@drawable/ic_play" />
+            android:src="@drawable/button_play" />
 
         <ImageView
             android:id="@+id/imgNext"
@@ -98,7 +98,7 @@
             android:layout_weight="1"
             android:contentDescription="@null"
             android:padding="@dimen/controller_padding"
-            android:src="@drawable/ic_next" />
+            android:src="@drawable/button_next" />
 
         <ImageView
             android:id="@+id/imgRepeat"
@@ -107,7 +107,7 @@
             android:layout_weight="1"
             android:contentDescription="@null"
             android:padding="5dp"
-            android:src="@drawable/ic_none_repeat" />
+            android:src="@drawable/button_repeat" />
 
     </LinearLayout>
 

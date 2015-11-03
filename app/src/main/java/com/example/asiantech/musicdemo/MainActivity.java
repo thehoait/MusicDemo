@@ -63,10 +63,6 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
     LinearLayout mController;
     @ViewById(R.id.tvSongTitle)
     TextView mTvSongTitle;
-    @ViewById(R.id.imgRepeat)
-    ImageView mImgRepeat;
-    @ViewById(R.id.imgShuffle)
-    ImageView mImgShuffle;
     @Getter
     private OnItemListener mOnItemListener;
     @Getter
@@ -261,20 +257,6 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
         mMusicService.playPrev();
     }
 
-    @Click(R.id.imgRepeat)
-    void onClickRepeat() {
-        Log.d("TAG ACTIVITY", "onClickRepeat");
-        mMusicService.setRepeat(!isRepeat());
-        updateRepeat();
-    }
-
-    @Click(R.id.imgShuffle)
-    void onClickShuffle() {
-        Log.d("TAG ACTIVITY", "onClickShuffle");
-        mMusicService.setShuffle(!isShuffle());
-        updateShuffle();
-    }
-
     @Click(R.id.tvSongTitle)
     void onClickTitle() {
         Log.d("TAG ACTIVITY", "onClickTitle");
@@ -292,24 +274,6 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
             mImgPlay.setImageResource(R.drawable.ic_pause);
         } else {
             mImgPlay.setImageResource(R.drawable.ic_play);
-        }
-    }
-
-    private void updateRepeat() {
-        Log.d("TAG ACTIVITY", "updateRepeat");
-        if (isRepeat()) {
-            mImgRepeat.setImageResource(R.drawable.ic_repeat);
-        } else {
-            mImgRepeat.setImageResource(R.drawable.ic_none_repeat);
-        }
-    }
-
-    private void updateShuffle() {
-        Log.d("TAG ACTIVITY", "updateShuffle");
-        if (isShuffle()) {
-            mImgShuffle.setImageResource(R.drawable.ic_shuffle);
-        } else {
-            mImgShuffle.setImageResource(R.drawable.ic_none_shuffle);
         }
     }
 
@@ -366,15 +330,6 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
     private boolean isPlaying() {
         return mMusicService != null && mBound && mMusicService.isPlaying();
 
-    }
-
-    private boolean isRepeat() {
-        return mMusicService != null && mBound && mMusicService.isRepeat();
-
-    }
-
-    private boolean isShuffle() {
-        return mMusicService != null && mBound && mMusicService.isShuffle();
     }
 
     @Override
@@ -475,8 +430,6 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
         mController.setVisibility(View.VISIBLE);
         mTvSongTitle.setText(getSongTitle());
         updatePlayPause();
-        updateRepeat();
-        updateShuffle();
         updateProgress();
         setSongTime();
     }

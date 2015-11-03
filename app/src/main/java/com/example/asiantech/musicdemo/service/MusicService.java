@@ -29,13 +29,14 @@ import java.util.Random;
 public class MusicService extends Service implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener {
     private MediaPlayer mMediaPlayer;
-    private ArrayList<Song> mListSong;
+    private ArrayList<Song> mPlayList;
     private int mSongPosition;
     private IBinder mMusicBinder = new MusicBinder();
     private static final int NOTIFICATION_ID = 111;
     private String mMessage = "";
     private RemoteViews mRemoteViews;
     private Notification mNotification;
+    private String mListType = "";
     private boolean mPause;
     private boolean mRepeat;
     private boolean mShuffle;
@@ -121,7 +122,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         Log.d("TAG SERVICE", "playSong");
         mMediaPlayer.reset();
         Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                mListSong.get(mSongPosition).getId());
+                mPlayList.get(mSongPosition).getId());
         try {
             mMediaPlayer.setDataSource(getApplicationContext(), uri);
         } catch (IOException e) {
@@ -139,14 +140,31 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         sendBroadcast();
     }
 
-    public void setList(ArrayList<Song> listSong) {
-        Log.d("TAG SERVICE", "setList");
-        mListSong = listSong;
+    public void setPlayList(ArrayList<Song> listSong) {
+        Log.d("TAG SERVICE", "setPlayList");
+        mPlayList = listSong;
+    }
+
+    public ArrayList<Song> getPlayList() {
+        Log.d("TAG SERVICE", "getPlayList");
+        return mPlayList;
+    }
+
+    public void setListType(String type) {
+        mListType = type;
+    }
+
+    public String getListType() {
+        return mListType;
     }
 
     public void setSong(int position) {
         Log.d("TAG SERVICE", "setSong");
         this.mSongPosition = position;
+    }
+
+    public long getSongPlayingId() {
+        return mPlayList.get(mSongPosition).getId();
     }
 
     public int getSongPosition() {
@@ -221,7 +239,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void playNext() {
         Log.d("TAG SERVICE", "playNext");
         mSongPosition++;
-        if (mSongPosition >= mListSong.size()) {
+        if (mSongPosition >= mPlayList.size()) {
             mSongPosition = 0;
         }
         playSong();
@@ -231,7 +249,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         Log.d("TAG SERVICE", "playPrev");
         mSongPosition--;
         if (mSongPosition < 0) {
-            mSongPosition = mListSong.size() - 1;
+            mSongPosition = mPlayList.size() - 1;
         }
         playSong();
     }
@@ -239,12 +257,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void playShuffle() {
         Log.d("TAG SERVICE", "playShuffle");
         Random random = new Random();
-        mSongPosition = random.nextInt(mListSong.size() - 1);
+        mSongPosition = random.nextInt(mPlayList.size() - 1);
         playSong();
     }
 
     public String getSongTitle() {
-        return mListSong.get(mSongPosition).getTitle();
+        return mPlayList.get(mSongPosition).getTitle();
     }
 
     public void setRepeat(boolean repeat) {

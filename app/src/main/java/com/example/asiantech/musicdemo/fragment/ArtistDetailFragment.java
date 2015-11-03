@@ -1,15 +1,21 @@
 package com.example.asiantech.musicdemo.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.asiantech.musicdemo.MainActivity;
 import com.example.asiantech.musicdemo.MainActivity_;
 import com.example.asiantech.musicdemo.OnItemListener;
 import com.example.asiantech.musicdemo.R;
 import com.example.asiantech.musicdemo.adapter.SongAdapter;
 import com.example.asiantech.musicdemo.model.Song;
+import com.example.asiantech.musicdemo.service.MusicService;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
@@ -18,11 +24,13 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 
 @EFragment(R.layout.song_list_fragment)
-public class ArtistDetailFragment extends Fragment {
+public class ArtistDetailFragment extends Fragment implements OnItemListener {
     @ViewById(R.id.recycleViewListSong)
     RecyclerView mRecycleListSong;
-    private OnItemListener mOnItemListener;
     private long mArtistId;
+    MusicService mMusicService;
+    ArrayList<Song> mListSongArtist;
+    SongAdapter mAdapter;
 
     @AfterViews
     void afterView() {
@@ -33,16 +41,78 @@ public class ArtistDetailFragment extends Fragment {
         }
         if (getActivity() instanceof MainActivity_) {
             listSong = ((MainActivity_) getActivity()).getMListSong();
-            mOnItemListener = ((MainActivity_) getActivity()).getMOnItemListener();
+            mMusicService = ((MainActivity_) getActivity()).getMMusicService();
         }
-        ArrayList<Song> listSongArtist = new ArrayList<>();
+        mListSongArtist = new ArrayList<>();
         for (int i = listSong.size() - 1; i >= 0; i--) {
             if (listSong.get(i).getArtistId() == mArtistId) {
-                listSongArtist.add(listSong.get(i));
+                Song song = listSong.get(i);
+                mListSongArtist.add(new Song(song.getId(), song.getTitle(), song.getArtistId(),
+                        song.getArtist(), song.getAlbumId(), song.getAlbum(), false));
             }
         }
-        SongAdapter adapter = new SongAdapter(getContext(), listSongArtist, mOnItemListener);
+        if (mMusicService.getListType().equals(MainActivity.LIST_TYPE_ARTIST)) {
+            for (int i = 0; i < mListSongArtist.size(); i++) {
+                if (mMusicService.getSongPlayingId() == mListSongArtist.get(i).getId()) {
+                    mListSongArtist.get(i).setPlaying(true);
+                }
+            }
+        }
+        mAdapter = new SongAdapter(getContext(), mListSongArtist, this);
         mRecycleListSong.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecycleListSong.setAdapter(adapter);
+        mRecycleListSong.setAdapter(mAdapter);
+        if (mReceiver != null) {
+            IntentFilter intentFilter = new IntentFilter(MainActivity.ACTION_STRING_ACTIVITY);
+            getActivity().registerReceiver(mReceiver, intentFilter);
+        }
+    }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("TAG ARTIST_FRAGMENT", "onReceive");
+            if (intent != null) {
+                String message = intent.getExtras().getString("message");
+                if (message != null) {
+                    switch (message) {
+                        case "play":
+                            updateSongPlay();
+                            break;
+                    }
+                }
+            }
+        }
+    };
+
+    @Override
+    public void onItemClick(int position) {
+        Log.d("TAG ARTIST_FRAGMENT", "onItemClick");
+        mMusicService.setPlayList(mListSongArtist);
+        mMusicService.setListType(MainActivity.LIST_TYPE_ARTIST);
+        if (getActivity() instanceof MainActivity_) {
+            ((MainActivity_) getActivity()).resetController();
+        }
+        mMusicService.setSong(position);
+        mMusicService.playSong();
+        updateSongPlay();
+    }
+
+    private void updateSongPlay() {
+        for (int i = 0; i < mListSongArtist.size(); i++) {
+            if (mListSongArtist.get(i).getId() == mMusicService.getSongPlayingId()) {
+                mListSongArtist.get(i).setPlaying(true);
+            } else {
+                mListSongArtist.get(i).setPlaying(false);
+            }
+        }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mReceiver != null) {
+            getActivity().unregisterReceiver(mReceiver);
+        }
+        super.onDestroy();
     }
 }

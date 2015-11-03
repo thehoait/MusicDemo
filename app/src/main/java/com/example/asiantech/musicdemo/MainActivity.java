@@ -70,12 +70,16 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
     @Getter
     private ArrayList<Song> mListSong;
     private boolean mBound;
+    @Getter
     private MusicService mMusicService;
     private Intent mPlayIntent;
     private StringBuilder mFormatBuilder;
     private Formatter mFormatter;
     private Handler mHandler = new Handler();
     public static final String ACTION_STRING_ACTIVITY = "ToActivity";
+    public static final String LIST_TYPE_ALL_SONG = "AllSong";
+    public static final String LIST_TYPE_ALBUM = "Album";
+    public static final String LIST_TYPE_ARTIST = "Artist";
     private PagerAdapter mPagerAdapter;
 
     @AfterViews
@@ -110,7 +114,10 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
             Log.d("TAG ACTIVITY", "onServiceConnected");
             MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
             mMusicService = binder.getService();
-            mMusicService.setList(mListSong);
+            if (mMusicService.getListType().equals("")) {
+                mMusicService.setPlayList(mListSong);
+                mMusicService.setListType(LIST_TYPE_ALL_SONG);
+            }
             mBound = true;
         }
 
@@ -165,7 +172,9 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
         for (int i = 0; i < mListSong.size(); i++) {
             mListSong.get(i).setPlaying(false);
         }
-        mListSong.get(mMusicService.getSongPosition()).setPlaying(true);
+        if (mMusicService.getListType().equals(LIST_TYPE_ALL_SONG)) {
+            mListSong.get(mMusicService.getSongPosition()).setPlaying(true);
+        }
         Fragment fragment = mPagerAdapter.getItem(0);
         if (fragment instanceof SongListFragment_) {
             ((SongListFragment_) fragment).notifySongListAdapter();
@@ -440,6 +449,10 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
     @Override
     public void onItemClick(int position) {
         Log.d("TAG ACTIVITY", "onItemClick");
+        if (!mMusicService.getListType().equals(LIST_TYPE_ALL_SONG)) {
+            mMusicService.setPlayList(mListSong);
+            mMusicService.setListType(LIST_TYPE_ALL_SONG);
+        }
         resetController();
         mMusicService.setSong(position);
         mMusicService.playSong();
@@ -455,7 +468,7 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
         setSongTime();
     }
 
-    private void resetController() {
+    public void resetController() {
         Log.d("TAG ACTIVITY", "resetController");
         if (mHandler != null && mRunnable != null) {
             mHandler.removeCallbacks(mRunnable);

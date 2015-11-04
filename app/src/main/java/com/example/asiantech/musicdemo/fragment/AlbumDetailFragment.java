@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.example.asiantech.musicdemo.MainActivity;
 import com.example.asiantech.musicdemo.MainActivity_;
@@ -18,15 +19,18 @@ import com.example.asiantech.musicdemo.model.Song;
 import com.example.asiantech.musicdemo.service.MusicService;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
-@EFragment(R.layout.song_list_fragment)
+@EFragment(R.layout.list_detail_fragment)
 public class AlbumDetailFragment extends Fragment implements OnItemListener {
     @ViewById(R.id.recycleViewListSong)
     RecyclerView mRecycleListSong;
+    @ViewById(R.id.tvTitle)
+    TextView mTvTitle;
     private long mAlbumId;
     private MusicService mMusicService;
     private ArrayList<Song> mListSongAlbum;
@@ -52,6 +56,7 @@ public class AlbumDetailFragment extends Fragment implements OnItemListener {
                         false));
             }
         }
+        mTvTitle.setText(mListSongAlbum.get(0).getAlbum());
         if (mMusicService.getListType().equals(MainActivity.LIST_TYPE_ALBUM)) {
             for (int i = 0; i < mListSongAlbum.size(); i++) {
                 if (mMusicService.getSongPlayingId() == mListSongAlbum.get(i).getId()) {
@@ -66,6 +71,11 @@ public class AlbumDetailFragment extends Fragment implements OnItemListener {
             IntentFilter intentFilter = new IntentFilter(MainActivity.ACTION_STRING_ACTIVITY);
             getActivity().registerReceiver(mReceiver, intentFilter);
         }
+    }
+
+    @Click(R.id.imgGoBack)
+    void onClickGoBack() {
+        getActivity().onBackPressed();
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {

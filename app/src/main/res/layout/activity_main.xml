@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
                 android:padding="@dimen/controller_padding"
-                android:src="@drawable/ic_back" />
+                android:src="@drawable/button_back" />
 
             <ImageView
                 android:id="@+id/imgPlay"
@@ -56,7 +56,7 @@
                 android:layout_toRightOf="@+id/imgBack"
                 android:contentDescription="@null"
                 android:padding="@dimen/controller_padding"
-                android:src="@drawable/ic_play" />
+                android:src="@drawable/button_play" />
 
             <ImageView
                 android:id="@+id/imgNext"
@@ -66,7 +66,7 @@
                 android:layout_toRightOf="@+id/imgPlay"
                 android:contentDescription="@null"
                 android:padding="@dimen/controller_padding"
-                android:src="@drawable/ic_next" />
+                android:src="@drawable/button_next" />
 
             <TextView
                 android:id="@+id/tvSongTitle"

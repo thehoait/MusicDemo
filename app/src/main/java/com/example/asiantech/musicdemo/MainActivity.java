@@ -273,9 +273,9 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
     private void updatePlayPause() {
         Log.d("TAG ACTIVITY", "updatePlayPause");
         if (isPlaying()) {
-            mImgPlay.setImageResource(R.drawable.ic_pause);
+            mImgPlay.setImageResource(R.drawable.main_control_pause);
         } else {
-            mImgPlay.setImageResource(R.drawable.ic_play);
+            mImgPlay.setImageResource(R.drawable.main_control_play);
         }
     }
 

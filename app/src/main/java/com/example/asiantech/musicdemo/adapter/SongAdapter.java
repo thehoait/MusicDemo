@@ -39,7 +39,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         if (song.isPlaying()) {
             holder.mTvTitle.setTextColor(Color.parseColor("#FF4081"));
         } else {
-            holder.mTvTitle.setTextColor(Color.parseColor("#80000000"));
+            holder.mTvTitle.setTextColor(Color.parseColor("#ffffff"));
         }
     }
 

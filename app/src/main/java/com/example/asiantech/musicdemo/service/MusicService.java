@@ -137,6 +137,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mp.start();
         updateNotification();
         mMessage = "play";
+
         sendBroadcast();
     }
 
@@ -204,9 +205,9 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     private void updateNotification() {
         if (isPlaying()) {
-            mRemoteViews.setImageViewResource(R.id.imgPlay, R.drawable.ic_pause);
+            mRemoteViews.setImageViewResource(R.id.imgPlay, R.drawable.button_notify_pause);
         } else {
-            mRemoteViews.setImageViewResource(R.id.imgPlay, R.drawable.ic_play);
+            mRemoteViews.setImageViewResource(R.id.imgPlay, R.drawable.button_notify_play);
         }
         mRemoteViews.setTextViewText(R.id.tvSongTitle, getSongTitle());
         startForeground(NOTIFICATION_ID, mNotification);

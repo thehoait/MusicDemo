@@ -38,8 +38,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     private Notification mNotification;
     private String mListType = "";
     private boolean mPause;
-    private boolean mRepeat;
-    private boolean mShuffle;
+    private int mMode;
 
     public MusicService() {
     }
@@ -102,14 +101,16 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         Log.d("TAG SERVICE", "onCompletion");
         mMessage = "completion";
         sendBroadcast();
-        if (isRepeat()) {
-            playSong();
-        } else if (isShuffle()) {
-            playShuffle();
-        } else {
-            playNext();
+        switch (mMode) {
+            case 2:
+                playSong();
+                break;
+            case 3:
+                playRandom();
+                break;
+            default:
+                playNext();
         }
-
     }
 
     @Override
@@ -144,11 +145,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     public void setPlayList(ArrayList<Song> listSong) {
         Log.d("TAG SERVICE", "setPlayList");
         mPlayList = listSong;
-    }
-
-    public ArrayList<Song> getPlayList() {
-        Log.d("TAG SERVICE", "getPlayList");
-        return mPlayList;
     }
 
     public void setListType(String type) {
@@ -197,7 +193,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mRemoteViews.setOnClickPendingIntent(R.id.imgPlay, pendingIntent);
         intent.putExtra("action", "back");
         pendingIntent = PendingIntent.getBroadcast(this, 3, intent, 0);
-        mRemoteViews.setOnClickPendingIntent(R.id.imgBack, pendingIntent);
+        mRemoteViews.setOnClickPendingIntent(R.id.imgPrevious, pendingIntent);
         intent.putExtra("action", "next");
         pendingIntent = PendingIntent.getBroadcast(this, 4, intent, 0);
         mRemoteViews.setOnClickPendingIntent(R.id.imgNext, pendingIntent);
@@ -255,8 +251,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         playSong();
     }
 
-    public void playShuffle() {
-        Log.d("TAG SERVICE", "playShuffle");
+    public void playRandom() {
+        Log.d("TAG SERVICE", "playRandom");
         Random random = new Random();
         mSongPosition = random.nextInt(mPlayList.size() - 1);
         playSong();
@@ -266,12 +262,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return mPlayList.get(mSongPosition).getDisplay();
     }
 
-    public void setRepeat(boolean repeat) {
-        this.mRepeat = repeat;
-    }
-
-    public void setShuffle(boolean shuffle) {
-        this.mShuffle = shuffle;
+    public void setMode(int mode) {
+        this.mMode = mode;
     }
 
     public int getCurPos() {
@@ -300,12 +292,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         return isPlaying() || mPause;
     }
 
-    public boolean isRepeat() {
-        return mRepeat;
-    }
-
-    public boolean isShuffle() {
-        return mShuffle;
+    public int getMode() {
+        return mMode;
     }
 
     private void sendBroadcast() {

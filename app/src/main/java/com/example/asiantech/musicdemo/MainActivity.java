@@ -252,7 +252,7 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
         mMusicService.playNext();
     }
 
-    @Click(R.id.imgBack)
+    @Click(R.id.imgPrevious)
     void onClickPrev() {
         Log.d("TAG ACTIVITY", "onClickPrev");
         resetController();

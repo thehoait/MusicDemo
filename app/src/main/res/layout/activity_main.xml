@@ -41,7 +41,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/imgBack"
+                android:id="@+id/imgPrevious"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@null"
@@ -52,8 +52,8 @@
                 android:id="@+id/imgPlay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/imgBack"
-                android:layout_toRightOf="@+id/imgBack"
+                android:layout_toEndOf="@+id/imgPrevious"
+                android:layout_toRightOf="@+id/imgPrevious"
                 android:contentDescription="@null"
                 android:padding="@dimen/controller_padding"
                 android:src="@drawable/button_play" />

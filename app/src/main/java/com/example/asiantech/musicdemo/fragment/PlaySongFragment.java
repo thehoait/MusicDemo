@@ -35,14 +35,15 @@ public class PlaySongFragment extends Fragment {
     TextView mTvSongTime;
     @ViewById(R.id.imgPlay)
     ImageView mImgPlay;
-    @ViewById(R.id.imgShuffle)
-    ImageView mImgShuffle;
-    @ViewById(R.id.imgRepeat)
+    @ViewById(R.id.imgMode)
+    ImageView mImgMode;
+    @ViewById(R.id.imgPlayList)
     ImageView mImgRepeat;
     private MusicService mMusicService;
     private StringBuilder mFormatBuilder;
     private Formatter mFormatter;
     private Handler mHandler = new Handler();
+    private int mMode;
 
     @AfterViews
     void afterView() {
@@ -57,6 +58,7 @@ public class PlaySongFragment extends Fragment {
         updatePlayPause();
         setSongTime();
         updateProgress();
+        updateMode();
         if (mReceiver != null) {
             IntentFilter intentFilter = new IntentFilter(MainActivity.ACTION_STRING_ACTIVITY);
             getActivity().registerReceiver(mReceiver, intentFilter);
@@ -128,30 +130,37 @@ public class PlaySongFragment extends Fragment {
         mMusicService.playNext();
     }
 
-    @Click(R.id.imgBack)
+    @Click(R.id.imgPrevious)
     void onClickBack() {
         resetController();
         mMusicService.playPrev();
     }
 
-    @Click(R.id.imgShuffle)
-    void onClickShuffle() {
-        mMusicService.setShuffle(!mMusicService.isShuffle());
-        updateShuffle();
+    @Click(R.id.imgMode)
+    void onClickMode() {
+        mMode++;
+        if (mMode > 3) {
+            mMode = 0;
+        }
+        mMusicService.setMode(mMode);
+        updateMode();
     }
 
-    @Click(R.id.imgRepeat)
-    void onClickRepeat() {
-        mMusicService.setRepeat(!mMusicService.isRepeat());
-        updateRepeat();
-    }
-
-    private void updateRepeat() {
-        mImgRepeat.setSelected(mMusicService.isRepeat());
-    }
-
-    private void updateShuffle() {
-        mImgShuffle.setSelected(mMusicService.isShuffle());
+    private void updateMode() {
+        switch (mMusicService.getMode()) {
+            case 0:
+                mImgMode.setImageResource(R.drawable.mode_list);
+                break;
+            case 1:
+                mImgMode.setImageResource(R.drawable.mode_list_cycle);
+                break;
+            case 2:
+                mImgMode.setImageResource(R.drawable.mode_single_cycle);
+                break;
+            case 3:
+                mImgMode.setImageResource(R.drawable.mode_random);
+                break;
+        }
     }
 
     private void setSongTime() {
@@ -194,9 +203,9 @@ public class PlaySongFragment extends Fragment {
     private void updatePlayPause() {
         Log.d("TAG ACTIVITY", "updatePlayPause");
         if (mMusicService.isPlaying()) {
-            mImgPlay.setImageResource(R.drawable.button_pause);
+            mImgPlay.setImageResource(R.drawable.music_play_control_pause);
         } else {
-            mImgPlay.setImageResource(R.drawable.button_play);
+            mImgPlay.setImageResource(R.drawable.music_play_control_play);
         }
     }
 

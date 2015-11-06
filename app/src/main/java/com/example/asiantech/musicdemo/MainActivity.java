@@ -79,10 +79,15 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
     public static final String LIST_TYPE_ALBUM = "Album";
     public static final String LIST_TYPE_ARTIST = "Artist";
     private PagerAdapter mPagerAdapter;
+    private String mMessage = "";
 
     @AfterViews
     void afterView() {
         Log.d("TAG ACTIVITY", "afterView");
+        Intent intent = getIntent();
+        if (intent.getExtras() != null) {
+            mMessage = intent.getExtras().getString("message");
+        }
         mListSong = new ArrayList<>();
         getListSong();
         Collections.sort(mListSong, new Comparator<Song>() {
@@ -151,6 +156,9 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
                         case "onRebind":
                             showController();
                             updateSongPlay();
+                            if ("fromNotify".equals(mMessage)) {
+                                onClickTitle();
+                            }
                             break;
                         case "completion":
                             resetController();

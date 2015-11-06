@@ -18,6 +18,10 @@
             android:id="@+id/tabStrip"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:textColor="#ffffff"
+            app:pstsDividerColor="#ffffff"
+            app:pstsIndicatorColor="#ffffff"
+            app:pstsIndicatorHeight="5dp"
             app:pstsShouldExpand="true" />
 
         <android.support.v4.view.ViewPager
@@ -35,6 +39,12 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical"
         android:visibility="visible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/view.line_recyclerview_height"
+            android:layout_gravity="top"
+            android:background="#ffffff" />
 
         <RelativeLayout
             android:layout_width="match_parent"

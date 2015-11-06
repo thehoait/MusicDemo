@@ -176,6 +176,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 .setContentTitle("play music")
                 .setContent(mRemoteViews);
         Intent intent = new Intent(this, MainActivity_.class);
+        intent.putExtra("message","fromNotify");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);

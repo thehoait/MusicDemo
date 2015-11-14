@@ -6,14 +6,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.asiantech.musicdemo.MainActivity;
+import com.example.asiantech.musicdemo.PlayListDialog_;
 import com.example.asiantech.musicdemo.R;
 import com.example.asiantech.musicdemo.service.MusicService;
+import com.viewpagerindicator.PageIndicator;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -38,7 +41,11 @@ public class PlaySongFragment extends Fragment {
     @ViewById(R.id.imgMode)
     ImageView mImgMode;
     @ViewById(R.id.imgPlayList)
-    ImageView mImgRepeat;
+    ImageView mImgPlayList;
+    @ViewById(R.id.pager)
+    ViewPager mViewPager;
+    @ViewById(R.id.indicator)
+    PageIndicator mIndicator;
     private MusicService mMusicService;
     private StringBuilder mFormatBuilder;
     private Formatter mFormatter;
@@ -47,13 +54,13 @@ public class PlaySongFragment extends Fragment {
 
     @AfterViews
     void afterView() {
+        intview();
         if (getActivity() instanceof MainActivity) {
             mMusicService = ((MainActivity) getActivity()).getMMusicService();
         }
         mFormatBuilder = new StringBuilder();
         mFormatter = new Formatter(mFormatBuilder, Locale.getDefault());
         mSeekBar.setMax(1000);
-        mTvSongTitle.setSelected(true);
         setSongTitle();
         updatePlayPause();
         setSongTime();
@@ -64,6 +71,10 @@ public class PlaySongFragment extends Fragment {
             getActivity().registerReceiver(mReceiver, intentFilter);
         }
         mSeekBar.setOnSeekBarChangeListener(mListener);
+    }
+
+    private void intview() {
+
     }
 
     private SeekBar.OnSeekBarChangeListener mListener = new SeekBar.OnSeekBarChangeListener() {
@@ -144,6 +155,27 @@ public class PlaySongFragment extends Fragment {
         }
         mMusicService.setMode(mMode);
         updateMode();
+    }
+
+    @Click(R.id.imgPlayList)
+    void onClickPlayList() {
+//        Dialog dialog = new Dialog(getContext(), R.style.DialogSlideAnimation);
+//        Window window = dialog.getWindow();
+//        WindowManager.LayoutParams wlp = window.getAttributes();
+//        wlp.gravity = Gravity.BOTTOM;
+//        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
+//        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+//        window.setAttributes(wlp);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.setContentView(R.layout.play_list_fragment);
+//        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//        RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.recycleViewPlayList);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        SongAdapter adapter = new SongAdapter(getContext(), mMusicService.getPlayList(), null);
+//        recyclerView.setAdapter(adapter);
+//        dialog.show();
+        PlayListDialog_ dialog = new PlayListDialog_();
+        dialog.show(getFragmentManager(), "PlayListDialog");
     }
 
     private void updateMode() {

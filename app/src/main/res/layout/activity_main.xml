@@ -18,6 +18,7 @@
             android:id="@+id/tabStrip"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:background="@color/colorHeader"
             android:textColor="#ffffff"
             app:pstsDividerColor="#ffffff"
             app:pstsIndicatorColor="#ffffff"
@@ -42,7 +43,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/view.line_recyclerview_height"
+            android:layout_height="1dp"
             android:layout_gravity="top"
             android:background="#ffffff" />
 

@@ -147,6 +147,10 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mPlayList = listSong;
     }
 
+    public ArrayList<Song> getPlayList() {
+        return mPlayList;
+    }
+
     public void setListType(String type) {
         mListType = type;
     }
@@ -176,7 +180,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
                 .setContentTitle("play music")
                 .setContent(mRemoteViews);
         Intent intent = new Intent(this, MainActivity_.class);
-        intent.putExtra("message","fromNotify");
+        intent.putExtra("message", "fromNotify");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
@@ -260,7 +264,12 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     }
 
     public String getSongTitle() {
-        return mPlayList.get(mSongPosition).getDisplay();
+        return mPlayList.get(mSongPosition).getTitle();
+    }
+
+    public String getSongDisplay() {
+        return mPlayList.get(mSongPosition).getTitle() + " - " + mPlayList.get(mSongPosition)
+                .getArtist();
     }
 
     public void setMode(int mode) {

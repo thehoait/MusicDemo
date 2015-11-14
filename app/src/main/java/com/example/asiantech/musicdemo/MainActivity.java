@@ -307,7 +307,7 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
 
     private String getSongTitle() {
         if (mMusicService != null && mBound) {
-            return mMusicService.getSongTitle();
+            return mMusicService.getSongDisplay();
         }
         return null;
     }

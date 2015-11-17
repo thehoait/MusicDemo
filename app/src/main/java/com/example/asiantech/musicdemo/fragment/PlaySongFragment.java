@@ -15,8 +15,9 @@ import android.widget.TextView;
 import com.example.asiantech.musicdemo.MainActivity;
 import com.example.asiantech.musicdemo.PlayListDialog_;
 import com.example.asiantech.musicdemo.R;
+import com.example.asiantech.musicdemo.adapter.PlaySongAdapter;
 import com.example.asiantech.musicdemo.service.MusicService;
-import com.viewpagerindicator.PageIndicator;
+import com.viewpagerindicator.CirclePageIndicator;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -45,7 +46,7 @@ public class PlaySongFragment extends Fragment {
     @ViewById(R.id.pager)
     ViewPager mViewPager;
     @ViewById(R.id.indicator)
-    PageIndicator mIndicator;
+    CirclePageIndicator mIndicator;
     private MusicService mMusicService;
     private StringBuilder mFormatBuilder;
     private Formatter mFormatter;
@@ -54,7 +55,8 @@ public class PlaySongFragment extends Fragment {
 
     @AfterViews
     void afterView() {
-        intview();
+        Log.d("TAG PLAY_SONG", "afterView");
+        intView();
         if (getActivity() instanceof MainActivity) {
             mMusicService = ((MainActivity) getActivity()).getMMusicService();
         }
@@ -73,8 +75,12 @@ public class PlaySongFragment extends Fragment {
         mSeekBar.setOnSeekBarChangeListener(mListener);
     }
 
-    private void intview() {
-
+    private void intView() {
+        Log.d("TAG PLAY_SONG", "initView");
+        PlaySongAdapter adapter = new PlaySongAdapter(getChildFragmentManager());
+        mViewPager.setAdapter(adapter);
+        mIndicator.setViewPager(mViewPager);
+        mViewPager.setCurrentItem(1);
     }
 
     private SeekBar.OnSeekBarChangeListener mListener = new SeekBar.OnSeekBarChangeListener() {
@@ -159,21 +165,6 @@ public class PlaySongFragment extends Fragment {
 
     @Click(R.id.imgPlayList)
     void onClickPlayList() {
-//        Dialog dialog = new Dialog(getContext(), R.style.DialogSlideAnimation);
-//        Window window = dialog.getWindow();
-//        WindowManager.LayoutParams wlp = window.getAttributes();
-//        wlp.gravity = Gravity.BOTTOM;
-//        wlp.width = WindowManager.LayoutParams.MATCH_PARENT;
-//        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-//        window.setAttributes(wlp);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.play_list_fragment);
-//        dialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-//        RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.recycleViewPlayList);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        SongAdapter adapter = new SongAdapter(getContext(), mMusicService.getPlayList(), null);
-//        recyclerView.setAdapter(adapter);
-//        dialog.show();
         PlayListDialog_ dialog = new PlayListDialog_();
         dialog.show(getFragmentManager(), "PlayListDialog");
     }
@@ -196,13 +187,13 @@ public class PlaySongFragment extends Fragment {
     }
 
     private void setSongTime() {
-        Log.d("TAG ACTIVITY", "setSongTime");
+        Log.d("TAG PLAY_SONG", "setSongTime");
         int duration = mMusicService.getDur();
         mTvSongTime.setText(stringForTime(duration));
     }
 
     private void setSongTitle() {
-        Log.d("TAG ACTIVITY", "setSongTime");
+        Log.d("TAG PLAY_SONG", "setSongTime");
         mTvSongTitle.setText(mMusicService.getSongTitle());
     }
 
@@ -233,7 +224,7 @@ public class PlaySongFragment extends Fragment {
     }
 
     private void updatePlayPause() {
-        Log.d("TAG ACTIVITY", "updatePlayPause");
+        Log.d("TAG PLAY_SONG", "updatePlayPause");
         if (mMusicService.isPlaying()) {
             mImgPlay.setImageResource(R.drawable.music_play_control_pause);
         } else {
@@ -242,7 +233,7 @@ public class PlaySongFragment extends Fragment {
     }
 
     public void resetController() {
-        Log.d("TAG SONG_FRAGMENT", "resetController");
+        Log.d("TAG PLAY_SONG", "resetController");
         if (mHandler != null && mRunnable != null) {
             mHandler.removeCallbacks(mRunnable);
         }
@@ -250,7 +241,7 @@ public class PlaySongFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        Log.d("TAG SONG_FRAGMENT", "onDestroy");
+        Log.d("TAG PLAY_SONG", "onDestroy");
         if (mHandler != null) {
             mHandler.removeCallbacks(mRunnable);
         }

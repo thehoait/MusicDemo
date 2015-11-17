@@ -32,25 +32,19 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rlContentFragment"
+    <com.viewpagerindicator.CirclePageIndicator
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlHeader"
+        android:padding="10dp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/rlController"
-        android:layout_below="@+id/rlHeader">
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <com.viewpagerindicator.CirclePageIndicator
-            android:id="@+id/indicator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dip" />
-
-    </RelativeLayout>
+        android:layout_below="@+id/indicator" />
 
     <RelativeLayout
         android:id="@+id/rlController"

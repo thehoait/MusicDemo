@@ -157,7 +157,7 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
                             showController();
                             updateSongPlay();
                             if ("fromNotify".equals(mMessage)) {
-                                onClickTitle();
+                                onClickMainController();
                             }
                             break;
                         case "completion":
@@ -267,13 +267,12 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
         mMusicService.playPrev();
     }
 
-    @Click(R.id.tvSongTitle)
-    void onClickTitle() {
-        Log.d("TAG ACTIVITY", "onClickTitle");
+    @Click(R.id.rlMainController)
+    void onClickMainController() {
+        Log.d("TAG ACTIVITY", "onClickMainController");
         PlaySongFragment_ fragment = new PlaySongFragment_();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.rlMainContainer
-                , fragment);
+        transaction.replace(R.id.rlMainContainer, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }

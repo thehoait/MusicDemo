@@ -13,7 +13,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.example.asiantech.musicdemo.MainActivity;
-import com.example.asiantech.musicdemo.PlayListDialog_;
 import com.example.asiantech.musicdemo.R;
 import com.example.asiantech.musicdemo.adapter.PlaySongAdapter;
 import com.example.asiantech.musicdemo.service.MusicService;
@@ -41,8 +40,6 @@ public class PlaySongFragment extends Fragment {
     ImageView mImgPlay;
     @ViewById(R.id.imgMode)
     ImageView mImgMode;
-    @ViewById(R.id.imgPlayList)
-    ImageView mImgPlayList;
     @ViewById(R.id.pager)
     ViewPager mViewPager;
     @ViewById(R.id.indicator)
@@ -161,12 +158,6 @@ public class PlaySongFragment extends Fragment {
         }
         mMusicService.setMode(mMode);
         updateMode();
-    }
-
-    @Click(R.id.imgPlayList)
-    void onClickPlayList() {
-        PlayListDialog_ dialog = new PlayListDialog_();
-        dialog.show(getFragmentManager(), "PlayListDialog");
     }
 
     private void updateMode() {

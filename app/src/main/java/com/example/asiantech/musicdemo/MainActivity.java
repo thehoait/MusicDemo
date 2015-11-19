@@ -163,9 +163,9 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
                         case "completion":
                             resetController();
                             break;
-                        case "close":
-                            mMusicService = null;
-                            finish();
+                        case "reset":
+                            resetController();
+                            break;
                     }
                 }
             }

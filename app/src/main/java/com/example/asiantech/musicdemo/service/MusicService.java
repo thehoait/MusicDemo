@@ -64,7 +64,7 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("TAG SERVICE", "onStartCommand");
-        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -102,6 +102,14 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
         mMessage = "completion";
         sendBroadcast();
         switch (mMode) {
+            case 0:
+                if (mSongPosition == mPlayList.size() - 1) {
+                    pausePlayer();
+                    stopForeground(true);
+                } else {
+                    playNext();
+                }
+                break;
             case 2:
                 playSong();
                 break;
@@ -121,6 +129,8 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     public void playSong() {
         Log.d("TAG SERVICE", "playSong");
+        mMessage = "reset";
+        sendBroadcast();
         mMediaPlayer.reset();
         Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 mPlayList.get(mSongPosition).getId());
@@ -290,12 +300,6 @@ public class MusicService extends Service implements MediaPlayer.OnPreparedListe
 
     public void seekTo(int position) {
         mMediaPlayer.seekTo(position);
-    }
-
-    public void clickClose() {
-        stopSelf();
-        mMessage = "close";
-        sendBroadcast();
     }
 
     public boolean isPlayMusic() {

@@ -22,7 +22,8 @@ public class MusicReceiver extends BroadcastReceiver {
         if (message != null) {
             switch (message) {
                 case "close":
-                    musicService.clickClose();
+                    musicService.pausePlayer();
+                    musicService.stopForeground(true);
                     break;
                 case "play":
                     if (!musicService.isPlaying()) {

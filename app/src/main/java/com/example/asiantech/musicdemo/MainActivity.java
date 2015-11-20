@@ -272,6 +272,7 @@ public class MainActivity extends FragmentActivity implements OnItemListener {
         Log.d("TAG ACTIVITY", "onClickMainController");
         PlaySongFragment_ fragment = new PlaySongFragment_();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.slide_in_up, 0, 0, R.anim.slide_out_up);
         transaction.replace(R.id.rlMainContainer, fragment);
         transaction.addToBackStack(null);
         transaction.commit();

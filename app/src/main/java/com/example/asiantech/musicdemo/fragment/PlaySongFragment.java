@@ -160,6 +160,11 @@ public class PlaySongFragment extends Fragment {
         updateMode();
     }
 
+    @Click(R.id.imgGoBack)
+    void onClickGoBack() {
+        getActivity().onBackPressed();
+    }
+
     private void updateMode() {
         switch (mMusicService.getMode()) {
             case 0:
